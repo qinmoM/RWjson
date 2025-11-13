@@ -1,3 +1,9 @@
+/**
+ * @file  jsonFile.h
+ * @author  qinmoM
+ * @version  v2
+ */
+
 #pragma once
 
 #include "json.hpp"
@@ -6,7 +12,11 @@
 #include <iostream>
 #include <sstream>
 
-// jsons handle
+/**
+ *              jsons handle
+ * @brief  A class handles all files
+ * @details   Create an object for reading and writing json files, and read/write the files based on the parameters.
+ */
 class jsonHandle
 {
 public:
@@ -14,12 +24,24 @@ public:
     ~jsonHandle();
 
 public:
+    /// @brief  Read json file data
+    /// @param file_path  file path
+    /// @return  If read successful, return corresponding json object;  Otherwise, if file opening fails or the format is incorrect, return empty json object.
     nlohmann::json read(const std::string& file_path) const;
+
+    /// @brief  Write json file data (Cover)
+    /// @param file_path  file path
+    /// @param json_object  json object to be written into
+    /// @return  If write successful, return true;  Otherwise, return false.
     bool write(const std::string& file_path, const nlohmann::json& json_object) const;
 
 };
 
-// json object
+/**
+ *              jsons handle
+ * @brief  One class corresponds to one files
+ * @details  Create an object for reading and writing json files, with one object corresponding to one file.
+ */
 class jsonFile
 {
 public:
@@ -27,7 +49,13 @@ public:
     ~jsonFile();
 
 public:
+    /// @brief  Read json file data
+    /// @return  If read successful, return corresponding json object;  Otherwise, if file opening fails or the format is incorrect, return empty json object.
     nlohmann::json read() const;
+
+    /// @brief  Write json file data (Cover)
+    /// @param json_object  json object to be written into
+    /// @return  If write successful, return true;  Otherwise, return false.
     bool write(const nlohmann::json& json_object) const;
 
 private:
@@ -35,7 +63,7 @@ private:
 
 };
 
-//          jsonHandle
+//          jsonHandle implementation
 
 jsonHandle::jsonHandle() = default;
 
@@ -80,7 +108,7 @@ bool jsonHandle::write(const std::string& file_path, const nlohmann::json& json_
     return true;
 }
 
-//          jsonFile
+//          jsonFile implementation
 
 jsonFile::jsonFile(const std::string& file_path)
     : file_path_(file_path)
