@@ -9,4 +9,4 @@ A lightweight JSON file i/o tools class based on nlohmann/json, simplifying file
 - [nlohmann/json](https://github.com/nlohmann/json)  
   
 ## Usage  
-Please check the main.cpp file.  
+- Please check the main.cpp file.  
