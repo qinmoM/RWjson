@@ -4,6 +4,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 // jsons handle
 class jsonHandle
@@ -44,16 +45,26 @@ nlohmann::json jsonHandle::read(const std::string& file_path) const
 {
     std::ifstream ifs(file_path);
     nlohmann::json data;
-    if (ifs.is_open())
-    {
-        ifs >> data;
-        ifs.close();
-    }
-    else
+
+    if (!ifs.is_open())
     {
         std::cerr << file_path << ", json file cannot be opened!" << std::endl;
+        return data;
     }
-    return data;
+
+    std::stringstream buffer;
+    buffer << ifs.rdbuf();
+    ifs.close();
+
+    try
+    {
+        return nlohmann::json::parse(buffer.str());
+    }
+    catch (nlohmann::json::parse_error& e)
+    {
+        std::cerr << "Json file parse error in " << file_path << " : " << e.what() << '\n';
+        return nlohmann::json::object();
+    }
 }
 
 bool jsonHandle::write(const std::string& file_path, const nlohmann::json& json_object) const
@@ -81,16 +92,26 @@ nlohmann::json jsonFile::read() const
 {
     std::ifstream ifs(file_path_);
     nlohmann::json data;
-    if (ifs.is_open())
-    {
-        ifs >> data;
-        ifs.close();
-    }
-    else
+
+    if (!ifs.is_open())
     {
         std::cerr << file_path_ << ", json file cannot be opened!" << std::endl;
+        return data;
     }
-    return data;
+
+    std::stringstream buffer;
+    buffer << ifs.rdbuf();
+    ifs.close();
+    
+    try
+    {
+        return nlohmann::json::parse(buffer.str());
+    }
+    catch (nlohmann::json::parse_error& e)
+    {
+        std::cerr << "Json file parse error in " << file_path_ << " : " << e.what() << '\n';
+        return nlohmann::json::object();
+    }
 }
 
 bool jsonFile::write(const nlohmann::json& json_object) const
